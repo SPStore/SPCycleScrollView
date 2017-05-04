@@ -12,9 +12,13 @@
 #define kScreenWidth  [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
+#define kCarouselViewH 200
+
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate, SPCarouselViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, weak) SPCarouselView *carouselView;
 
 @property (nonatomic, strong) NSArray *localPhotos;
 
@@ -39,7 +43,6 @@
                        @"http://img.boqiicdn.com/Data/Bbs/Pushs/img79891399602390.jpg",
                        @"http://sc.jb51.net/uploads/allimg/150703/14-150F3164339355.jpg",
                        @"http://img1.3lian.com/2015/a2/243/d/187.jpg",
-                       @"http://www.xiumeitu.net/uploads/allimg/150413/1-15041323004K47.jpg",
                        @"http://pic7.nipic.com/20100503/1792030_163333013611_2.jpg",
                        @"http://www.microfotos.com/pic/0/90/9023/902372preview4.jpg",
                        @"http://pic1.win4000.com/wallpaper/b/55b9e2271b119.jpg"
@@ -56,6 +59,13 @@
     
     // 示例4
     [self urlTest2];
+    
+    
+    // 不要直接把self.headerView赋值给tableView.tableHeaderView,否则无法实现下拉放大
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kCarouselViewH)];
+    [tableHeaderView addSubview:self.carouselView];
+    self.tableView.tableHeaderView = tableHeaderView;
+
 }
 
 #pragma mark - 本地图片示例
@@ -63,17 +73,17 @@
 - (void)localTest1 {
 
     SPCarouselView *carouselView = [SPCarouselView carouselScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 200) localImages:self.localPhotos];
+    self.carouselView = carouselView;
     // 属性设置
     [self setupPropertyForCarouselView:carouselView];
-    self.tableView.tableHeaderView = carouselView;
 }
 
 // 示例2    本地图片,alloc init创建
 - (void)localTest2 {
     SPCarouselView *carouselView = [[SPCarouselView alloc] init];
+    self.carouselView = carouselView;
     carouselView.frame = CGRectMake(0, 0, kScreenWidth, 200);
     [self setupPropertyForCarouselView:carouselView];
-    self.tableView.tableHeaderView = carouselView;
     
     carouselView.localImages = self.localPhotos;
 }
@@ -82,19 +92,18 @@
 // 示例3    网络图片,类方法创建
 - (void)urlTest1 {
     SPCarouselView *carouselView = [SPCarouselView carouselScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 200) urlImages:self.urlPhotos];
+    self.carouselView = carouselView;
     // 属性设置
     [self setupPropertyForCarouselView:carouselView];
-    self.tableView.tableHeaderView = carouselView;
 }
 
 // 示例4    网络图片,alloc init创建
 - (void)urlTest2 {
     SPCarouselView *carouselView = [[SPCarouselView alloc] init];
     carouselView.frame = CGRectMake(0, 0, kScreenWidth, 200);
+    self.carouselView = carouselView;
     
     [self setupPropertyForCarouselView:carouselView];
-    
-    self.tableView.tableHeaderView = carouselView;
     
     carouselView.urlImages = self.urlPhotos;
 }
@@ -139,6 +148,24 @@
     }
     cell.textLabel.text = [NSString stringWithFormat:@"第%zd行",indexPath.row];
     return cell;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    CGFloat width = self.view.frame.size.width;
+
+    CGFloat offsetY = scrollView.contentOffset.y;
+    
+    if (scrollView == self.tableView) {
+        
+        // 偏移的y值
+        if(offsetY < 0) {
+            CGFloat totalOffset = kCarouselViewH + fabs(offsetY);
+            CGFloat f = totalOffset / kCarouselViewH;
+            // 拉伸后的图片的frame应该是同比例缩放。
+            self.carouselView.frame = CGRectMake(-(width*f-width) / 2.0, offsetY, width * f, totalOffset);
+        }
+    }
 }
 
 - (UITableView *)tableView {

@@ -112,8 +112,9 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 // timer事件
 -(void)timerAction{
     // 定时器每次触发都让当前图片为轮播图的第三张ImageView的image
-    [_scrollView setContentOffset:CGPointMake(2*kWidth, 0) animated:YES];
+    [_scrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
 }
+
 -(void)configure{
     [self addSubview:self.scrollView];
     // 添加最初的三张imageView
@@ -230,7 +231,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     CGSize size;
     if (!_pageImageSize.width) {// 没有设置图片，系统原有样式
         size = [_pageControl sizeForNumberOfPages:_pageControl.numberOfPages];
-        size.height = 15;
+        size.height = 8;
     } else { // 设置图片了
         size = CGSizeMake(_pageImageSize.width * (_pageControl.numberOfPages * 2 - 1), _pageImageSize.height);
     }
@@ -290,8 +291,9 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 
 #pragma mark - scrollView代理方法
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
     // 到第一张图片时   (一上来，当前图片的x值是kWidth)
-    if (scrollView.contentOffset.x <= 0) {  // 右滑
+    if (ceil(scrollView.contentOffset.x) <= 0) {  // 右滑
         _nextImgView.image = _currentImgView.image;
         _currentImgView.image = _lastImgView.image;
         // 将轮播图的偏移量设回中间位置
@@ -312,7 +314,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
         [self setImageView:_lastImgView withSubscript:_lastPhotoIndex];
     }
     // 到最后一张图片时（最后一张就是轮播图的第三张）
-    if (scrollView.contentOffset.x  >= kWidth*2) {  // 左滑
+    if (ceil(scrollView.contentOffset.x)  >= kWidth*2) {  // 左滑
         _lastImgView.image = _currentImgView.image;
         _currentImgView.image = _nextImgView.image;
         // 将轮播图的偏移量设回中间位置

@@ -6,7 +6,7 @@
 //  Copyright © 2016年 leshengping. All rights reserved.
 //
 // 本框架的网络图片加载依赖于SDWebImage，SDWebImage的github地址：https://github.com/rs/SDWebImage
-// 本框架的github地址:
+// 本框架的github地址:https://github.com/SPStore/SPCarouselView
 
 #import <UIKit/UIKit.h>
 
