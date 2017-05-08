@@ -55,10 +55,10 @@
     //[self localTest2];
     
     // 示例3
-    //[self urlTest1];
+    //[self urlTest3];
     
     // 示例4
-    [self urlTest2];
+    [self urlTest4];
     
     
     // 不要直接把self.headerView赋值给tableView.tableHeaderView,否则无法实现下拉放大
@@ -90,7 +90,7 @@
 
 #pragma mark - 网络图片示例
 // 示例3    网络图片,类方法创建
-- (void)urlTest1 {
+- (void)urlTest3 {
     SPCarouselView *carouselView = [SPCarouselView carouselScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 200) urlImages:self.urlPhotos];
     self.carouselView = carouselView;
     // 属性设置
@@ -98,11 +98,11 @@
 }
 
 // 示例4    网络图片,alloc init创建
-- (void)urlTest2 {
+- (void)urlTest4 {
     SPCarouselView *carouselView = [[SPCarouselView alloc] init];
     carouselView.frame = CGRectMake(0, 0, kScreenWidth, 200);
     self.carouselView = carouselView;
-    
+    // 属性设置
     [self setupPropertyForCarouselView:carouselView];
     
     carouselView.urlImages = self.urlPhotos;
@@ -128,11 +128,15 @@
     //carouselView.imageMode = SPCarouselViewImageModeScaleAspectFit;
     // 设置小圆点图片
     //[carouselView setPageImage:[UIImage imageNamed:@"笑脸yellow.png"] currentPageImage:[UIImage imageNamed:@"笑脸red.png"]];
+    
+    //carouselView.clickedImageBlock = ^(NSUInteger index) {
+        //NSLog(@"block方式:点击了第%zd张图片",index);
+    //};
 }
 
 #pragma mark - SPCarouselViewDelegate
 - (void)carouselView:(SPCarouselView *)carouselView clickedImageAtIndex:(NSUInteger)index {
-    NSLog(@"点击了第%zd张图片",index);
+    NSLog(@"代理方式:点击了第%zd张图片",index);
 }
 
 #pragma mark - TableView DataSource
