@@ -135,6 +135,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     _scrollView.contentOffset = CGPointMake(kWidth, 0);
     
     _pageControl.numberOfPages = self.kImageCount;
+    _pageControl.currentPage = 0;
     
     self.nextPhotoIndex = 1;
     self.lastPhotoIndex = _kImageCount - 1;
