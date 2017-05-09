@@ -14,10 +14,12 @@
 
 @protocol SPCarouselViewDelegate <NSObject>
 @optional
-// 轮播图被点击时触发的代理方法,index为点击的图片下标
+// 轮播图的图片被点击时触发的代理方法,index为点击的图片下标
 -(void)carouselView:(SPCarouselView *)carouselView clickedImageAtIndex:(NSUInteger)index;
 
 @end
+
+typedef void(^ClickedImageBlock)(NSUInteger index);
 
 typedef NS_ENUM(NSInteger, SPPageContolPosition) {
     SPPageContolPositionBottomCenter,  // 底部中心
@@ -34,7 +36,7 @@ typedef NS_ENUM(NSInteger, SPCarouselViewImageMode) {
 
 @interface SPCarouselView : UIView
 
-@property(weak, nonatomic) id<SPCarouselViewDelegate>delegate;
+
 
 // 提供类方法创建轮播图 这种创建方式有个局限性，那就是必须在创建时就传入数组。
 /** 本地图片 */
@@ -49,6 +51,12 @@ typedef NS_ENUM(NSInteger, SPCarouselViewImageMode) {
 @property(strong, nonatomic) NSArray<NSString *> *localImages;
 // 网络图片
 @property(strong, nonatomic) NSArray<NSString *> *urlImages;
+
+// 代理
+@property(weak, nonatomic) id<SPCarouselViewDelegate>delegate;
+
+// 轮播图的图片被点击时回调的block，与代理功能一致，开发者可二选其一.如果两种方式不小心同时实现了，则默认block方式
+@property (nonatomic, copy) ClickedImageBlock clickedImageBlock;
 
 
 // 图片自动切换间隔时间, 默认设置为 2s

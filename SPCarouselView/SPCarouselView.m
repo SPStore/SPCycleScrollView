@@ -135,6 +135,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     _scrollView.contentOffset = CGPointMake(kWidth, 0);
     
     _pageControl.numberOfPages = self.kImageCount;
+    _pageControl.currentPage = 0;
     
     self.nextPhotoIndex = 1;
     self.lastPhotoIndex = _kImageCount - 1;
@@ -362,7 +363,14 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 
 #pragma mark - 手势点击事件
 -(void)handleTapActionInImageView:(UITapGestureRecognizer *)tap {
-    if (_delegate && [_delegate respondsToSelector:@selector(carouselView:clickedImageAtIndex:)]) {
+    if (self.clickedImageBlock) {
+        // 如果_nextPhotoIndex == 0,那么中间那张图片一定是数组中最后一张，我们要传的就是中间那张图片在数组中的下标
+        if (_nextPhotoIndex == 0) {
+            self.clickedImageBlock(_kImageCount-1);
+        }else{
+            self.clickedImageBlock(_nextPhotoIndex-1);
+        }
+    } else if (_delegate && [_delegate respondsToSelector:@selector(carouselView:clickedImageAtIndex:)]) {
         // 如果_nextPhotoIndex == 0,那么中间那张图片一定是数组中最后一张，我们要传的就是中间那张图片在数组中的下标
         if (_nextPhotoIndex == 0) {
             [_delegate carouselView:self clickedImageAtIndex:_kImageCount-1];
