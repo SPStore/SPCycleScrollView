@@ -9,7 +9,6 @@
 // 本框架的github地址:https://github.com/SPStore/SPCarouselView
 
 #import <UIKit/UIKit.h>
-#import "UIImageView+WebCache.h" // 如果这里报错，说明没有导入SDWebImage
 
 @class SPCarouselView;
 
