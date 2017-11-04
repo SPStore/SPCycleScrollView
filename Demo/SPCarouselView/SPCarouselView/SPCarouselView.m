@@ -7,7 +7,6 @@
 //
 
 #import "SPCarouselView.h"
-#import "UIImageView+WebCache.h" // 如果这里报错，说明没有导入SDWebImage
 
 #define  kWidth  self.bounds.size.width
 #define  kHeight self.bounds.size.height
