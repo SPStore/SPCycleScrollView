@@ -52,18 +52,19 @@
     //[self localTest1];
     
     // 示例2
-    //[self localTest2];
+    [self localTest2];
     
     // 示例3
     //[self urlTest3];
     
     // 示例4
-    [self urlTest4];
+    //[self urlTest4];
     
     
     // 不要直接把self.headerView赋值给tableView.tableHeaderView,否则无法实现下拉放大
     UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kCarouselViewH)];
     [tableHeaderView addSubview:self.carouselView];
+
     self.tableView.tableHeaderView = tableHeaderView;
 
 }
@@ -73,6 +74,7 @@
 - (void)localTest1 {
 
     SPCarouselView *carouselView = [SPCarouselView carouselScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 200) localImages:self.localPhotos];
+    carouselView.translatesAutoresizingMaskIntoConstraints = NO;
     self.carouselView = carouselView;
     // 属性设置
     [self setupPropertyForCarouselView:carouselView];
@@ -113,7 +115,7 @@
     // 代理
     carouselView.delegate = self;
     // 轮播图切换时间
-    //carouselView.duration = 5.0f;
+    carouselView.duration = 3.0f;
     // 是否自动轮播
     //carouselView.autoScroll = NO;
     // page小圆点颜色
@@ -172,6 +174,7 @@
     }
 }
 
+
 - (UITableView *)tableView {
     
     if (!_tableView) {
@@ -181,6 +184,16 @@
     }
     return _tableView;
 }
+
+//- (void)updateViewConstraints {
+//    [super updateViewConstraints];
+//    NSMutableArray *contraints = [NSMutableArray array];
+//    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.carouselView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tableHeaderView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+//    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.carouselView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:kCarouselViewH]];
+//    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.carouselView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:tableHeaderView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.carouselView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:tableHeaderView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [tableHeaderView addConstraints:contraints];
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -346,11 +346,6 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     }
 }
 
-// scrollView结束减速的时候调用
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-
-}
-
 // 用户将要拖拽时将定时器关闭
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     // 关闭定时器
@@ -390,7 +385,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
    
     // 重新设置contentOffset和contentSize对于轮播图下拉放大以及里面的图片跟随放大起着关键作用，因为scrollView放大了，如果不手动设置contentOffset和contentSize，则会导致scrollView的容量不够大，从而导致图片越出scrollview边界的问题
     self.scrollView.contentSize = CGSizeMake(kWidth * 3, kHeight);
-    // 奇怪的是，这里如果采用动画效果设置偏移量将不起任何作用
+    // 这里如果采用动画效果设置偏移量将不起任何作用
     self.scrollView.contentOffset = CGPointMake(kWidth, 0);
 
     self.lastImgView.frame = CGRectMake(0, 0, kWidth, kHeight);
