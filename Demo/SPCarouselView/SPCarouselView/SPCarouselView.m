@@ -168,7 +168,6 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
         
         [self openTimer];
     }
-    
 }
 
 // 网络图片
