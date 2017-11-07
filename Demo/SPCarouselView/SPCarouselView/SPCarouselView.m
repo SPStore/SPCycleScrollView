@@ -426,6 +426,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 -(UIImageView *)lastImgView{
     if (_lastImgView == nil) {
         _lastImgView = [[UIImageView alloc] init];
+        _lastImgView.backgroundColor = [UIColor grayColor];
     }
     return _lastImgView;
 }
@@ -433,6 +434,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 -(UIImageView *)currentImgView{
     if (_currentImgView == nil) {
         _currentImgView = [[UIImageView alloc] init];
+        _currentImgView.backgroundColor = [UIColor grayColor];
         // 给当前图片添加手势
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapActionInImageView:)];
         [_currentImgView addGestureRecognizer:tap];
@@ -444,6 +446,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 -(UIImageView *)nextImgView{
     if (_nextImgView == nil) {
         _nextImgView = [[UIImageView alloc] init];
+        _nextImgView.backgroundColor = [UIColor grayColor];
     }
     return _nextImgView;
 }

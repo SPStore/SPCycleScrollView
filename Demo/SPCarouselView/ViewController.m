@@ -14,6 +14,10 @@
 
 #define kCarouselViewH 200
 
+#define isIPhoneX [UIScreen mainScreen].bounds.size.height == 812
+#define topMargin (isIPhoneX ? 44 : 0)
+#define bottomMargin (isIPhoneX ? 34 : 0)
+
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate, SPCarouselViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -30,6 +34,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     
     [self.view addSubview:self.tableView];
     
@@ -129,7 +134,7 @@
     // 设置轮播图图片的展示模式
     //carouselView.imageMode = SPCarouselViewImageModeScaleAspectFit;
     // 设置小圆点图片
-    //[carouselView setPageImage:[UIImage imageNamed:@"笑脸yellow.png"] currentPageImage:[UIImage imageNamed:@"笑脸red.png"]];
+    [carouselView setPageImage:[UIImage imageNamed:@"笑脸yellow.png"] currentPageImage:[UIImage imageNamed:@"笑脸red.png"]];
     
     //carouselView.clickedImageBlock = ^(NSUInteger index) {
         //NSLog(@"block方式:点击了第%zd张图片",index);
@@ -174,26 +179,24 @@
     }
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.carouselView closeTimer];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self.carouselView openTimer];
+}
 
 - (UITableView *)tableView {
     
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, topMargin, kScreenWidth, kScreenHeight-topMargin-bottomMargin) style:UITableViewStylePlain];
+        NSLog(@"--- %d--%d",topMargin,bottomMargin);
         _tableView.dataSource = self;
         _tableView.delegate = self;
     }
     return _tableView;
 }
-
-//- (void)updateViewConstraints {
-//    [super updateViewConstraints];
-//    NSMutableArray *contraints = [NSMutableArray array];
-//    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.carouselView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tableHeaderView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-//    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.carouselView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:kCarouselViewH]];
-//    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.carouselView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:tableHeaderView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-//    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.carouselView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:tableHeaderView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-//    [tableHeaderView addConstraints:contraints];
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
