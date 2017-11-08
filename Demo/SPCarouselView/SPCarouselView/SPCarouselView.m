@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 #pragma mark - Public Method
 // 如果是本地图片调用此方法
 +(SPCarouselView *)carouselScrollViewWithFrame:(CGRect)frame localImages:(NSArray<NSString *> *)localImages{
-    SPCarouselView *carouseScroll =[[SPCarouselView alloc]initWithFrame:frame];
+    SPCarouselView *carouseScroll =[[SPCarouselView alloc] initWithFrame:frame];
     // 调用set方法
     carouseScroll.localImages = localImages;
     return carouseScroll;
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 
 // 如果是网络图片调用此方法
 +(SPCarouselView *)carouselScrollViewWithFrame:(CGRect)frame urlImages:(NSArray<NSString *> *)urlImages{
-    SPCarouselView *carouseScroll = [[SPCarouselView alloc]initWithFrame:frame];
+    SPCarouselView *carouseScroll = [[SPCarouselView alloc] initWithFrame:frame];
     // 调用set方法
     carouseScroll.urlImages = urlImages;
     return carouseScroll;
@@ -382,7 +382,6 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     [super layoutSubviews];
     
     self.scrollView.frame = self.bounds;
-   
     // 重新设置contentOffset和contentSize对于轮播图下拉放大以及里面的图片跟随放大起着关键作用，因为scrollView放大了，如果不手动设置contentOffset和contentSize，则会导致scrollView的容量不够大，从而导致图片越出scrollview边界的问题
     self.scrollView.contentSize = CGSizeMake(kWidth * 3, kHeight);
     // 这里如果采用动画效果设置偏移量将不起任何作用
@@ -394,6 +393,9 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     
     // 等号左边是掉setter方法，右边调用getter方法
     self.pageControlPosition = self.pageControlPosition;
+    
+    NSLog(@"--- %@",NSStringFromCGRect(self.scrollView.frame));
+
 }
 
 #pragma mark - 懒加载
@@ -459,6 +461,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 }
 
 -(void)dealloc {
+    NSLog(@"dealloc");
     _scrollView.delegate = nil;
 }
 

@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, weak) SPCarouselView *carouselView;
+@property (nonatomic, strong) SPCarouselView *carouselView;
 
 @property (nonatomic, strong) NSArray *localPhotos;
 
@@ -79,7 +79,6 @@
 - (void)localTest1 {
 
     SPCarouselView *carouselView = [SPCarouselView carouselScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 200) localImages:self.localPhotos];
-    carouselView.translatesAutoresizingMaskIntoConstraints = NO;
     self.carouselView = carouselView;
     // 属性设置
     [self setupPropertyForCarouselView:carouselView];
@@ -122,7 +121,7 @@
     // 轮播图切换时间
     carouselView.duration = 3.0f;
     // 是否自动轮播
-    //carouselView.autoScroll = NO;
+    // carouselView.autoScroll = NO;
     // page小圆点颜色
     //carouselView.pageColor = [UIColor whiteColor];
     // 当前page小圆点颜色
@@ -180,11 +179,11 @@
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.carouselView closeTimer];
+    self.carouselView.autoScroll = NO;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    [self.carouselView openTimer];
+    self.carouselView.autoScroll = YES;
 }
 
 - (UITableView *)tableView {

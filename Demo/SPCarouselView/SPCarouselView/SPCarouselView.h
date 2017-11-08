@@ -79,12 +79,6 @@ typedef NS_ENUM(NSInteger, SPCarouselViewImageMode) {
 // 轮播图上的图片显示模式
 @property (assign, nonatomic) SPCarouselViewImageMode imageMode;
 
-// 开启定时器
-- (void)openTimer;
-
-// 关闭定时器
-- (void)closeTimer;
-
 /** 设置小圆点的图片 */
 - (void)setPageImage:(UIImage *)image currentPageImage:(UIImage *)currentImage;
 
