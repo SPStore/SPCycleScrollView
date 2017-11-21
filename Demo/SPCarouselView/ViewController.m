@@ -129,11 +129,11 @@
     // pageControl的位置,默认底部中心
     //carouselView.pageControlPosition = SPPageContolPositionBottomRight;
     // 是否显示pageControl
-    //carouselView.showPageControl = NO;
+    // carouselView.showPageControl = NO;
     // 设置轮播图图片的展示模式
     //carouselView.imageMode = SPCarouselViewImageModeScaleAspectFit;
     // 设置小圆点图片
-    [carouselView setPageImage:[UIImage imageNamed:@"笑脸yellow.png"] currentPageImage:[UIImage imageNamed:@"笑脸red.png"]];
+    //[carouselView setPageImage:[UIImage imageNamed:@"笑脸yellow.png"] currentPageImage:[UIImage imageNamed:@"笑脸red.png"]];
     
     //carouselView.clickedImageBlock = ^(NSUInteger index) {
         //NSLog(@"block方式:点击了第%zd张图片",index);

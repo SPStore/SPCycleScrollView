@@ -134,7 +134,9 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     //显示中间的图片
     _scrollView.contentOffset = CGPointMake(kWidth, 0);
     
-    _pageControl.numberOfPages = self.kImageCount;
+    if (!_pageControl.hidden) {
+        _pageControl.numberOfPages = self.kImageCount;
+    }
     _pageControl.currentPage = 0;
     
     self.nextPhotoIndex = 1;

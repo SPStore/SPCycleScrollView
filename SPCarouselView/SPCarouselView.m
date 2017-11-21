@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 #pragma mark - Public Method
 // 如果是本地图片调用此方法
 +(SPCarouselView *)carouselScrollViewWithFrame:(CGRect)frame localImages:(NSArray<NSString *> *)localImages{
-    SPCarouselView *carouseScroll =[[SPCarouselView alloc]initWithFrame:frame];
+    SPCarouselView *carouseScroll =[[SPCarouselView alloc] initWithFrame:frame];
     // 调用set方法
     carouseScroll.localImages = localImages;
     return carouseScroll;
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 
 // 如果是网络图片调用此方法
 +(SPCarouselView *)carouselScrollViewWithFrame:(CGRect)frame urlImages:(NSArray<NSString *> *)urlImages{
-    SPCarouselView *carouseScroll = [[SPCarouselView alloc]initWithFrame:frame];
+    SPCarouselView *carouseScroll = [[SPCarouselView alloc] initWithFrame:frame];
     // 调用set方法
     carouseScroll.urlImages = urlImages;
     return carouseScroll;
@@ -134,7 +134,9 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     //显示中间的图片
     _scrollView.contentOffset = CGPointMake(kWidth, 0);
     
-    _pageControl.numberOfPages = self.kImageCount;
+    if (!_pageControl.hidden) {
+        _pageControl.numberOfPages = self.kImageCount;
+    }
     _pageControl.currentPage = 0;
     
     self.nextPhotoIndex = 1;
@@ -346,11 +348,6 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     }
 }
 
-// scrollView结束减速的时候调用
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-
-}
-
 // 用户将要拖拽时将定时器关闭
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     // 关闭定时器
@@ -387,10 +384,9 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     [super layoutSubviews];
     
     self.scrollView.frame = self.bounds;
-   
     // 重新设置contentOffset和contentSize对于轮播图下拉放大以及里面的图片跟随放大起着关键作用，因为scrollView放大了，如果不手动设置contentOffset和contentSize，则会导致scrollView的容量不够大，从而导致图片越出scrollview边界的问题
     self.scrollView.contentSize = CGSizeMake(kWidth * 3, kHeight);
-    // 奇怪的是，这里如果采用动画效果设置偏移量将不起任何作用
+    // 这里如果采用动画效果设置偏移量将不起任何作用
     self.scrollView.contentOffset = CGPointMake(kWidth, 0);
 
     self.lastImgView.frame = CGRectMake(0, 0, kWidth, kHeight);
@@ -399,6 +395,9 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     
     // 等号左边是掉setter方法，右边调用getter方法
     self.pageControlPosition = self.pageControlPosition;
+    
+    NSLog(@"--- %@",NSStringFromCGRect(self.scrollView.frame));
+
 }
 
 #pragma mark - 懒加载
@@ -431,6 +430,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 -(UIImageView *)lastImgView{
     if (_lastImgView == nil) {
         _lastImgView = [[UIImageView alloc] init];
+        _lastImgView.backgroundColor = [UIColor grayColor];
     }
     return _lastImgView;
 }
@@ -438,6 +438,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 -(UIImageView *)currentImgView{
     if (_currentImgView == nil) {
         _currentImgView = [[UIImageView alloc] init];
+        _currentImgView.backgroundColor = [UIColor grayColor];
         // 给当前图片添加手势
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapActionInImageView:)];
         [_currentImgView addGestureRecognizer:tap];
@@ -449,6 +450,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 -(UIImageView *)nextImgView{
     if (_nextImgView == nil) {
         _nextImgView = [[UIImageView alloc] init];
+        _nextImgView.backgroundColor = [UIColor grayColor];
     }
     return _nextImgView;
 }
@@ -461,6 +463,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 }
 
 -(void)dealloc {
+    NSLog(@"dealloc");
     _scrollView.delegate = nil;
 }
 
