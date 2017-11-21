@@ -271,16 +271,16 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     
     switch (imageMode) {
         case SPCarouselViewImageModeScaleToFill:
-            _nextImgView.contentMode = _currentImgView.contentMode = _lastImgView.contentMode = UIViewContentModeScaleToFill;
+            self.nextImgView.contentMode = self.currentImgView.contentMode = self.lastImgView.contentMode = UIViewContentModeScaleToFill;
             break;
         case SPCarouselViewImageModeScaleAspectFit:
-            _nextImgView.contentMode = _currentImgView.contentMode = _lastImgView.contentMode = UIViewContentModeScaleAspectFit;
+            self.nextImgView.contentMode = self.currentImgView.contentMode = self.lastImgView.contentMode = UIViewContentModeScaleAspectFit;
             break;
         case SPCarouselViewImageModeScaleAspectFill:
-            _nextImgView.contentMode = _currentImgView.contentMode = _lastImgView.contentMode = UIViewContentModeScaleAspectFill;
+            self.nextImgView.contentMode = self.currentImgView.contentMode = self.lastImgView.contentMode = UIViewContentModeScaleAspectFill;
             break;
         case SPCarouselViewImageModeCenter:
-            _nextImgView.contentMode = _currentImgView.contentMode = _lastImgView.contentMode = UIViewContentModeCenter;
+            self.nextImgView.contentMode = self.currentImgView.contentMode = self.lastImgView.contentMode = UIViewContentModeCenter;
             break;
         default:
             break;
@@ -431,6 +431,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     if (_lastImgView == nil) {
         _lastImgView = [[UIImageView alloc] init];
         _lastImgView.backgroundColor = [UIColor grayColor];
+        _lastImgView.layer.masksToBounds = YES;
     }
     return _lastImgView;
 }
@@ -439,6 +440,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
     if (_currentImgView == nil) {
         _currentImgView = [[UIImageView alloc] init];
         _currentImgView.backgroundColor = [UIColor grayColor];
+        _currentImgView.layer.masksToBounds = YES;
         // 给当前图片添加手势
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapActionInImageView:)];
         [_currentImgView addGestureRecognizer:tap];
@@ -450,6 +452,7 @@ typedef NS_ENUM(NSInteger, SPCarouseImagesDataStyle){
 -(UIImageView *)nextImgView{
     if (_nextImgView == nil) {
         _nextImgView = [[UIImageView alloc] init];
+        _nextImgView.layer.masksToBounds = YES;
         _nextImgView.backgroundColor = [UIColor grayColor];
     }
     return _nextImgView;
