@@ -112,7 +112,9 @@
 // 示例3    网络图片,类方法创建
 - (void)urlTest3 {
     SPCycleScrollView *cycleScrollView = [SPCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, kCycleScrollViewH) urlImages:self.urlPhotos placeholderImage:[UIImage imageNamed:@"placeholder"]];
-    cycleScrollView.pageControl.pageIndicatorImage = [UIImage imageNamed:@"currentDot"];
+    cycleScrollView.pageControl.pageIndicatorTintColor = [UIColor blackColor];
+    cycleScrollView.pageControl.currentPageIndicatorTintColor = [UIColor redColor];
+    cycleScrollView.placeholderImage = [UIImage imageNamed:@"placeholder"];
     self.cycleScrollView = cycleScrollView;
 }
 
@@ -120,12 +122,17 @@
 - (void)urlTest4 {
     SPCycleScrollView *cycleScrollView = [[SPCycleScrollView alloc] init];
     cycleScrollView.frame = CGRectMake(0, 0, kScreenWidth, kCycleScrollViewH);
-    cycleScrollView.pageControl.pageIndicatorTintColor = [UIColor blackColor];
-    cycleScrollView.pageControl.currentPageIndicatorTintColor = [UIColor redColor];
-    cycleScrollView.placeholderImage = [UIImage imageNamed:@"placeholder"];
-    self.cycleScrollView = cycleScrollView;
+    cycleScrollView.pageControl.currentPageIndicatorImage = [UIImage imageNamed:@"currentDot"];
+    cycleScrollView.pageControl.pageIndicatorImage = [UIImage imageNamed:@"otherDot"];
+    cycleScrollView.pageControlPosition = SPPageContolPositionBottomRight;
     
+//    cycleScrollView.titleLabelBackgroundColor = [UIColor clearColor];
+//    cycleScrollView.titleLabelTextColor = [UIColor redColor];
     cycleScrollView.urlImages = self.urlPhotos;
+    cycleScrollView.titles = @[@"两只小猫咪",@"两只小狗",@"戴毛巾的狗",@"gif图",@"好难过",@"含情脉脉",@"3只狗吐舌头",@"一只浪漫多情的狗"];
+    
+    self.cycleScrollView = cycleScrollView;
+
 }
 
 #pragma mark - SPCycleScrollViewDelegate

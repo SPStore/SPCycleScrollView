@@ -13,6 +13,101 @@
 
 #define kPageControlMargin 10.0f
 
+typedef NS_ENUM(NSInteger, SPCycleImageViewLabelPosition) {
+    SPCycleImageViewLabelPositionCenter,  // 底部中心
+    SPCycleImageViewLabelPositionRight,   // 底部右边
+    SPCycleImageViewLabelPositionLeft     // 底部左边
+};
+
+@interface SPCycleImageView : UIImageView
+@property (nonatomic, strong) UIView *labelContentView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, copy) NSString *title;
+
+- (void)setLabelPosition:(SPCycleImageViewLabelPosition)labelPosition remainderSpacing:(CGFloat)remainderSpacing;
+@property (nonatomic, assign) CGFloat remainderSpacing; // label的剩余空间，比pageControl的宽度略大
+@property (nonatomic, assign) SPCycleImageViewLabelPosition labelPosition; // label的位置
+@end
+
+@implementation SPCycleImageView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self setLabelPosition:SPCycleImageViewLabelPositionCenter remainderSpacing:0];
+        [self addSubview:self.labelContentView];
+        [self.labelContentView addSubview:self.titleLabel];
+    }
+    return self;
+}
+
+- (void)setTitle:(NSString *)title {
+    _title = title;
+    self.titleLabel.text = title;
+}
+
+- (void)setLabelPosition:(SPCycleImageViewLabelPosition)labelPosition remainderSpacing:(CGFloat)remainderSpacing {
+    _labelPosition = labelPosition;
+    _remainderSpacing = remainderSpacing;
+    switch (_labelPosition) {
+        case SPCycleImageViewLabelPositionCenter:
+            self.titleLabel.textAlignment = NSTextAlignmentCenter;
+            break;
+        case SPCycleImageViewLabelPositionRight:
+            self.titleLabel.textAlignment = NSTextAlignmentRight;
+            break;
+        case SPCycleImageViewLabelPositionLeft:
+            self.titleLabel.textAlignment = NSTextAlignmentLeft;
+            break;
+        default:
+            break;
+    }
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    CGFloat width = self.bounds.size.width;
+    CGFloat height = self.bounds.size.height;
+    CGFloat labelH = 30;
+    
+    self.labelContentView.frame = CGRectMake(0, height-labelH, width, labelH);
+    
+    switch (_labelPosition) {
+        case SPCycleImageViewLabelPositionCenter:
+            self.titleLabel.frame = CGRectMake(10, 0, width-20, labelH);
+            break;
+        case SPCycleImageViewLabelPositionRight:
+            self.titleLabel.frame = CGRectMake(_remainderSpacing+20, 0, width-(_remainderSpacing+20+10), labelH);
+            break;
+        case SPCycleImageViewLabelPositionLeft:
+            self.titleLabel.frame = CGRectMake(10, 0, width-(_remainderSpacing+20+10), labelH);
+            break;
+        default:
+            break;
+    }
+}
+
+- (UIView *)labelContentView {
+    if (!_labelContentView) {
+        _labelContentView = [[UIView alloc] init];
+        _labelContentView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+        _labelContentView.hidden = YES;
+    }
+    return _labelContentView;
+}
+
+- (UILabel *)titleLabel {
+    if (!_titleLabel) {
+        _titleLabel = [[UILabel alloc] init];
+        _titleLabel.textColor = [UIColor whiteColor];
+    }
+    return _titleLabel;
+}
+
+@end
+
 typedef NS_ENUM(NSInteger, SPCycleScrollViewImagesDataType){
     SPCycleScrollViewImagesDataTypeInLocal,// 本地图片标记
     SPCycleScrollViewImagesDataTypeInURL   // URL图片标记
@@ -24,9 +119,9 @@ typedef NS_ENUM(NSInteger, SPCycleScrollViewImagesDataType){
 @property(strong, nonatomic) SPPageControl *pageControl;
 
 // 前一个视图,当前视图,下一个视图
-@property(strong, nonatomic) UIImageView *lastImgView;
-@property(strong, nonatomic) UIImageView *currentImgView;
-@property(strong, nonatomic) UIImageView *nextImgView;
+@property(strong, nonatomic) SPCycleImageView *lastImgView;
+@property(strong, nonatomic) SPCycleImageView *currentImgView;
+@property(strong, nonatomic) SPCycleImageView *nextImgView;
 
 // 图片来源(本地或URL)
 @property(nonatomic) SPCycleScrollViewImagesDataType carouseImagesType;
@@ -72,6 +167,9 @@ static NSString *cache;
     _duration = 2;
     _autoScroll = YES;
     _autoCache = YES;
+    _titleLabelBackgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    _titleLabelTextColor = [UIColor whiteColor];
+    _titleLabelFont = [UIFont systemFontOfSize:16];
     
     cache = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"XLsn0wLoop"];
     BOOL isDir = NO;
@@ -146,6 +244,17 @@ static NSString *cache;
         [self setImageView:_currentImgView withSubscript:0];
         // 将下一张图片设置为数组中第二张图片,如果数组只有一张图片，则上、中、下图片全部是数组中的第一张图片
         [self setImageView:_nextImgView withSubscript:_kImageCount == 1 ? 0 : 1];
+        
+        if (self.titles.count) { // 如果设置标题数组在设置图片数组之前，在这里需要再调一次titles的setter方法
+            self.titles = self.titles;
+        }
+        _lastImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
+        _currentImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
+        _nextImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
+        _lastImgView.titleLabel.textColor = _titleLabelTextColor;
+        _currentImgView.titleLabel.textColor = _titleLabelTextColor;
+        _nextImgView.titleLabel.textColor = _titleLabelTextColor;
+
     } else {
         [self.scrollView addSubview:self.currentImgView];
         [self setImageView:_currentImgView withSubscript:0];
@@ -162,7 +271,7 @@ static NSString *cache;
 }
 
 // 根据下标设置imgView的image
-- (void)setImageView:(UIImageView *)imgView withSubscript:(NSInteger)subcript{
+- (void)setImageView:(SPCycleImageView *)imgView withSubscript:(NSInteger)subcript{
     if (_placeholderImage) { // 先给一张
         imgView.image = _placeholderImage;
     }
@@ -176,6 +285,9 @@ static NSString *cache;
     } else{
         // 网络图片设置
         [self sp_setImageWithImageView:imgView URL:self.urlImages[subcript]];
+    }
+    if (self.titles.count) {
+        imgView.title = self.titles[subcript];
     }
 }
 
@@ -194,7 +306,6 @@ static NSString *cache;
         
         [self openTimer];
     }
-    
 }
 
 // 网络图片
@@ -209,6 +320,58 @@ static NSString *cache;
         [self configure];
         
         [self openTimer];
+    }
+}
+
+- (void)setTitles:(NSArray<NSString *> *)titles {
+    if (titles.count == 0) {
+        _lastImgView.labelContentView.hidden = YES;
+        _currentImgView.labelContentView.hidden = YES;
+        _nextImgView.labelContentView.hidden = YES;
+    } else {
+        
+        _lastImgView.labelContentView.hidden = NO;
+        _currentImgView.labelContentView.hidden = NO;
+        _nextImgView.labelContentView.hidden = NO;
+        
+        NSArray *images = [NSArray array];
+        if (self.carouseImagesType == SPCycleScrollViewImagesDataTypeInURL) {
+            images = self.urlImages;
+        } else {
+            images = self.localImages;
+        }
+        if (titles.count < images.count) { // 如果标题个数小于图片个数，则用空字符串补齐
+            NSMutableArray *newTitles = [NSMutableArray arrayWithArray:titles];
+            for (NSInteger i = titles.count; i < images.count; i++) {
+                [newTitles addObject:@""];
+            }
+            _titles = newTitles;
+        } else { // 标题个数大于或等于图片个数，如果是大于了，下标最大只会是图片最大个数-1，所以不用考虑截取到和图片个数一样大
+            _titles = titles;
+        }
+        _lastImgView.title = _titles[(_titles.count-1)];
+        _currentImgView.title = _titles[0];
+        _nextImgView.title = _titles[_titles.count == 1 ? 0 : 1];
+        
+        self.pageControlPosition = self.pageControlPosition; // 重新设置pageControl的位置
+    }
+}
+
+- (void)setTitleLabelBackgroundColor:(UIColor *)titleLabelBackgroundColor {
+    _titleLabelBackgroundColor = titleLabelBackgroundColor;
+    if (_lastImgView && _currentImgView && _nextImgView) {
+        _lastImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
+        _currentImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
+        _nextImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
+    }
+}
+
+- (void)setTitleLabelTextColor:(UIColor *)titleLabelTextColor {
+    _titleLabelTextColor = titleLabelTextColor;
+    if (_lastImgView && _currentImgView && _nextImgView) {
+        _lastImgView.titleLabel.textColor = _titleLabelTextColor;
+        _currentImgView.titleLabel.textColor = _titleLabelTextColor;
+        _nextImgView.titleLabel.textColor = _titleLabelTextColor;
     }
 }
 
@@ -249,21 +412,34 @@ static NSString *cache;
     
     _pageControl.frame = CGRectMake(0, 0, size.width, size.height);
     
-    CGFloat centerY = kHeight - size.height * 0.5 - kPageControlMargin;
     CGFloat pointY = kHeight - size.height - kPageControlMargin;
     
     switch (pageControlPosition) {
         case SPPageContolPositionBottomCenter:
             // 底部中间
-            _pageControl.center = CGPointMake(kWidth * 0.5, centerY);
+            if (self.titles.count) {
+                _pageControl.frame = CGRectMake((kWidth-size.width)*0.5, pointY-30, size.width, size.height);
+            } else {
+                _pageControl.frame = CGRectMake((kWidth-size.width)*0.5, pointY, size.width, size.height);
+            }
+            [_lastImgView setLabelPosition:SPCycleImageViewLabelPositionCenter remainderSpacing:0];
+            [_currentImgView setLabelPosition:SPCycleImageViewLabelPositionCenter remainderSpacing:0];
+            [_nextImgView setLabelPosition:SPCycleImageViewLabelPositionCenter remainderSpacing:0];
+
             break;
         case SPPageContolPositionBottomRight:
             // 底部右边
             _pageControl.frame = CGRectMake(kWidth - size.width - kPageControlMargin, pointY, size.width, size.height);
+            [_lastImgView setLabelPosition:SPCycleImageViewLabelPositionLeft remainderSpacing:size.width];
+            [_currentImgView setLabelPosition:SPCycleImageViewLabelPositionLeft remainderSpacing:size.width];
+            [_nextImgView setLabelPosition:SPCycleImageViewLabelPositionLeft remainderSpacing:size.width];
             break;
         case SPPageContolPositionBottomLeft:
             // 底部左边
             _pageControl.frame = CGRectMake(kPageControlMargin, pointY, size.width, size.height);
+            [_lastImgView setLabelPosition:SPCycleImageViewLabelPositionRight remainderSpacing:size.width];
+            [_currentImgView setLabelPosition:SPCycleImageViewLabelPositionRight remainderSpacing:size.width];
+            [_nextImgView setLabelPosition:SPCycleImageViewLabelPositionRight remainderSpacing:size.width];
             break;
         default:
             break;
@@ -287,6 +463,8 @@ static NSString *cache;
 
         _nextImgView.image = _currentImgView.image;
         _currentImgView.image = _lastImgView.image;
+        _nextImgView.title = _currentImgView.title;
+        _currentImgView.title = _lastImgView.title;
         // 将轮播图的偏移量设回中间位置
         scrollView.contentOffset = CGPointMake(kWidth, 0);
         _lastImgView.image = nil;
@@ -308,6 +486,8 @@ static NSString *cache;
     if (ceil(offsetX)  >= kWidth*2) {  // 左滑
         _lastImgView.image = _currentImgView.image;
         _currentImgView.image = _nextImgView.image;
+        _lastImgView.title = _currentImgView.title;
+        _currentImgView.title = _nextImgView.title;
         scrollView.contentOffset = CGPointMake(kWidth, 0);
         _nextImgView.image = nil;
         // 一定要是大于等于，否则数组中只有一张图片时会出错
@@ -334,7 +514,7 @@ static NSString *cache;
 }
 
 // 用户将要拖拽时将定时器关闭
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     // 关闭定时器
     [self closeTimer];
 }
@@ -509,17 +689,17 @@ UIImage *gifImageNamed(NSString *imageName) {
     return _pageControl;
 }
 
-- (UIImageView *)lastImgView{
+- (SPCycleImageView *)lastImgView{
     if (_lastImgView == nil) {
-        _lastImgView = [[UIImageView alloc] init];
+        _lastImgView = [[SPCycleImageView alloc] init];
         _lastImgView.layer.masksToBounds = YES;
     }
     return _lastImgView;
 }
 
-- (UIImageView *)currentImgView{
+- (SPCycleImageView *)currentImgView{
     if (_currentImgView == nil) {
-        _currentImgView = [[UIImageView alloc] init];
+        _currentImgView = [[SPCycleImageView alloc] init];
         _currentImgView.layer.masksToBounds = YES;
         // 给当前图片添加手势
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapActionInImageView:)];
@@ -529,9 +709,9 @@ UIImage *gifImageNamed(NSString *imageName) {
     return _currentImgView;
 }
 
-- (UIImageView *)nextImgView{
+- (SPCycleImageView *)nextImgView{
     if (_nextImgView == nil) {
-        _nextImgView = [[UIImageView alloc] init];
+        _nextImgView = [[SPCycleImageView alloc] init];
         _nextImgView.layer.masksToBounds = YES;
     }
     return _nextImgView;
@@ -556,3 +736,4 @@ UIImage *gifImageNamed(NSString *imageName) {
 }
 
 @end
+

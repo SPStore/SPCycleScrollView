@@ -45,6 +45,11 @@ typedef NS_ENUM(NSInteger, SPPageContolPosition) {
 @property(strong, nonatomic) NSArray<NSString *> *localImages; // 本地图片
 @property(strong, nonatomic) NSArray<NSString *> *urlImages; // 网络图片
 
+@property (nonatomic, strong) NSArray<NSString *> *titles; // 图片对应的标题数组，如果标题个数小于图片个数，内部会用空字符串补足
+@property (nonatomic, strong) UIColor *titleLabelBackgroundColor; // 图片上label的背景色，默认是[UIColor colorWithWhite:0 alpha:0.5]
+@property (nonatomic, strong) UIColor *titleLabelTextColor; // 图片上label的文字颜色，默认是白色
+@property (nonatomic, strong) UIFont *titleLabelFont; // 图片上label的字体
+
 @property(weak, nonatomic) id<SPCycleScrollViewDelegate> delegate; // 代理
 @property (nonatomic, copy) ClickedImageBlock clickedImageBlock; // 轮播图的图片被点击时回调的block，与代理功能一致，开发者可二选其一.如果两种方式不小心同时实现了，则默认block方式
 
