@@ -1,5 +1,5 @@
 #
-#  Be sure to run `pod spec lint SPCarouselView.podspec' to ensure this is a
+#  Be sure to run `pod spec lint SPCycleScrollView.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
 #  To learn more about Podspec attributes see http://docs.cocoapods.org/specification.html
@@ -15,8 +15,8 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "SPCarouselView"
-  s.version      = "1.2.2"
+  s.name         = "SPCycleScrollView"
+  s.version      = "1.7.0"
   s.summary      = "轮播图."
 
   # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 			这是一个轮播图
                    DESC
 
-  s.homepage     = "https://github.com/SPStore/SPCarouselView"
+  s.homepage     = "https://github.com/SPStore/SPCycleScrollView"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/SPStore/SPCarouselView.git", :tag => s.version }
+  s.source       = { :git => "https://github.com/SPStore/SPCycleScrollView.git", :tag => s.version }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -91,7 +91,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "SPCarouselView"
+  s.source_files  = "SPCycleScrollView"
   s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
@@ -133,6 +133,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency "SDWebImage"
+  # s.dependency "SDWebImage"
 
 end
