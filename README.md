@@ -5,13 +5,12 @@ target 'MyApp' do
 end
 ```
 ## 功能
-- [x] Categories for `UIImageView`, `UIButton`, `MKAnnotationView` adding web image and cache management
-- [x] An asynchronous image downloader
-- [x] An asynchronous memory + disk image caching with automatic cache expiration handling
-- [x] A background image decompression
-- [x] A guarantee that the same URL won't be downloaded several times
-- [x] A guarantee that bogus URLs won't be retried again and again
-- [x] A guarantee that main thread will never be blocked
-- [x] Performances!
-- [x] Use GCD and ARC
+- [x] 支持本地图片和网络图片
+- [x] 支持本地gif和网络gif 
+- [x] 自定义pageControl，可以对pageControl自由定制各种属性
+- [x] pageControl支持当前图片和其余图片的设置，当前图片和其余图片大小可以不一致
+- [x] 可以设置pageControl的位置(提供左中右3种位置)
+- [x] 可以设置图片的内容填充模式
+- [x] 支持autoLayout、xib和storyboard
+- [x] 支持轮播图下拉放大
 ## 具体效果和使用明细可参考简书:http://www.jianshu.com/p/35bdf1e9c8b6
