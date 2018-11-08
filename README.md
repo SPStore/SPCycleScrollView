@@ -1,7 +1,7 @@
 ## 安装
 ```
 target 'MyApp' do
-  pod 'SPCycleScrollView', '~> 2.0.0'
+  pod 'SPCycleScrollView', '~> 2.0.1'
 end
 ```
 ## 功能
