@@ -15,33 +15,8 @@ end
 - [x] 支持autoLayout、xib和storyboard
 - [x] 支持轮播图下拉放大
 
-## .h文件源码
+## 主要内容
 ```
-#import <UIKit/UIKit.h>
-#import "SPPageControl.h"
-
-@class SPCycleScrollView;
-
-NS_ASSUME_NONNULL_BEGIN
-
-
-@protocol SPCycleScrollViewDelegate <NSObject>
-@optional
-// 轮播图的图片被点击时触发的代理方法,index为点击的图片下标
-- (void)cycleScrollView:(SPCycleScrollView *)cycleScrollView clickedImageAtIndex:(NSUInteger)index;
-
-@end
-
-typedef void(^ClickedImageBlock)(NSUInteger index);
-
-typedef NS_ENUM(NSInteger, SPPageContolPosition) {
-    SPPageContolPositionBottomCenter,  // 底部中心
-    SPPageContolPositionBottomRight,   // 底部右边
-    SPPageContolPositionBottomLeft     // 底部左边
-};
-
-@interface SPCycleScrollView : UIView
-
 // 提供类方法创建轮播图 这种创建方式有个局限性，那就是必须在创建时就传入数组。
 /** 本地图片 */
 + (SPCycleScrollView *)cycleScrollViewWithFrame:(CGRect)frame localImages:(nonnull NSArray<NSString *> *)localImages placeholderImage:(nullable UIImage *)image;
@@ -78,6 +53,5 @@ typedef NS_ENUM(NSInteger, SPPageContolPosition) {
 @property (assign, nonatomic) SPPageContolPosition pageControlPosition; // pageControl的位置,分左,中,右
 
 + (void)clearDiskCache;
-@end
 ```
 ## 具体效果和使用明细可参考简书:http://www.jianshu.com/p/35bdf1e9c8b6
