@@ -128,6 +128,7 @@
     
 //    cycleScrollView.titleLabelBackgroundColor = [UIColor clearColor];
 //    cycleScrollView.titleLabelTextColor = [UIColor redColor];
+//    cycleScrollView.titleLabelFont = [UIFont boldSystemFontOfSize:16];
     cycleScrollView.urlImages = self.urlPhotos;
     cycleScrollView.titles = @[@"两只小猫咪",@"两只小狗",@"戴毛巾的狗",@"gif图",@"好难过",@"含情脉脉",@"3只狗吐舌头",@"一只浪漫多情的狗"];
     

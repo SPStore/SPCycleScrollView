@@ -164,12 +164,12 @@ static NSString *cache;
 }
 
 - (void)initialize {
-    _duration = 2;
+    _duration = 2.0;
     _autoScroll = YES;
     _autoCache = YES;
     _titleLabelBackgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
     _titleLabelTextColor = [UIColor whiteColor];
-    _titleLabelFont = [UIFont systemFontOfSize:16];
+    _titleLabelFont = [UIFont systemFontOfSize:17];
     
     cache = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"XLsn0wLoop"];
     BOOL isDir = NO;
@@ -248,12 +248,9 @@ static NSString *cache;
         if (self.titles.count) { // 如果设置标题数组在设置图片数组之前，在这里需要再调一次titles的setter方法
             self.titles = self.titles;
         }
-        _lastImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
-        _currentImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
-        _nextImgView.labelContentView.backgroundColor = _titleLabelBackgroundColor;
-        _lastImgView.titleLabel.textColor = _titleLabelTextColor;
-        _currentImgView.titleLabel.textColor = _titleLabelTextColor;
-        _nextImgView.titleLabel.textColor = _titleLabelTextColor;
+        self.titleLabelBackgroundColor = self.titleLabelBackgroundColor;
+        self.titleLabelTextColor = self.titleLabelTextColor;
+        self.titleLabelFont = self.titleLabelFont;
 
     } else {
         [self.scrollView addSubview:self.currentImgView];
@@ -372,6 +369,15 @@ static NSString *cache;
         _lastImgView.titleLabel.textColor = _titleLabelTextColor;
         _currentImgView.titleLabel.textColor = _titleLabelTextColor;
         _nextImgView.titleLabel.textColor = _titleLabelTextColor;
+    }
+}
+
+- (void)setTitleLabelFont:(UIFont *)titleLabelFont {
+    _titleLabelFont = titleLabelFont;
+    if (_lastImgView && _currentImgView && _nextImgView) {
+        _lastImgView.titleLabel.font = _titleLabelFont;
+        _currentImgView.titleLabel.font = _titleLabelFont;
+        _nextImgView.titleLabel.font = _titleLabelFont;
     }
 }
 
